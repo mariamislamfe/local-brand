@@ -9,7 +9,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const OUT = path.resolve('public/img');
-const WIDTHS = [720, 1400];
+const WIDTHS = [720, 1080, 1400];
 
 // name -> unsplash photo id
 const IMAGES = {

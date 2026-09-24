@@ -4,9 +4,6 @@ import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
-// On touch devices the collapsing address bar resizes the viewport mid-scroll, which makes
-// pinned scenes jump up and down. normalizeScroll takes over touch scrolling to stop that.
-if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) ScrollTrigger.normalizeScroll(true);
 
 /** Shared easing vocabulary — one motion language for the whole site. */
 export const EASE = {
@@ -19,6 +16,8 @@ gsap.defaults({ ease: EASE.out, duration: 1.1 });
 
 export const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const finePointer = () => window.matchMedia('(pointer: fine)').matches;
+/** Phones/tablets: lighter effects so scroll-driven scenes hold 60fps. */
+export const lite = () => window.matchMedia('(pointer: coarse), (max-width: 900px)').matches;
 
 let lenis: Lenis | null = null;
 
@@ -26,6 +25,9 @@ export function startSmoothScroll() {
   // Smoothing follows the user's own scroll input, so it stays on even with reduced motion —
   // turning it off made the pinned scenes step and stutter.
   if (lenis) return lenis;
+  // Touch devices already have native momentum scrolling and Lenis doesn't smooth touch —
+  // running it there only adds a second scroll listener and per-frame work.
+  if (window.matchMedia('(pointer: coarse)').matches) return null;
   lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 0.9 });
   lenis.on('scroll', ScrollTrigger.update);
   // keep Lenis' idea of the page height in step with pin spacers after every re-measure

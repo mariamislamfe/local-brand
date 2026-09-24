@@ -27,7 +27,9 @@ const labelFor = (f: Filter) => FILTERS.find((x) => x.id === f)?.label ?? collec
 export function Shop() {
   const { filter, setFilter } = useShop();
   const [sort, setSort] = useState<Sort>('featured');
-  const [seen, setSeen] = useState(false);
+  // revealed once, via the DOM — a React re-render of 20 cards here landed mid-scroll
+  const seen = useRef(false);
+  const gridRef = useRef<HTMLDivElement | null>(null);
   const section = useRef<HTMLElement>(null);
 
   const list = useMemo(() => products.filter((p) => matchesFilter(p, filter)).sort(sorters[sort]), [filter, sort]);
@@ -36,7 +38,15 @@ export function Shop() {
     // observe the section, not the grid — the grid is re-keyed (remounted) on every filter change
     const el = section.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && setSeen(true), { rootMargin: '0px 0px -25% 0px' });
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting || seen.current) return;
+        seen.current = true;
+        gridRef.current?.classList.add('is-in');
+        io.disconnect();
+      },
+      { rootMargin: '0px 0px -25% 0px' },
+    );
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -90,7 +100,15 @@ export function Shop() {
         </label>
       </div>
 
-      <div key={`${filter}-${sort}`} className={`shop__grid${seen ? ' is-in' : ''}`}>
+      <div
+        key={`${filter}-${sort}`}
+        className="shop__grid"
+        ref={(n) => {
+          // the grid remounts per filter — re-apply the reveal state without a React render
+          gridRef.current = n;
+          if (n && seen.current) n.classList.add('is-in');
+        }}
+      >
         {items}
       </div>
 

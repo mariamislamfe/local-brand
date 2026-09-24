@@ -409,3 +409,10 @@ ol {
   letter-spacing: -0.04em;
   color: var(--saffron);
 }
+
+/* ——— phones: drop effects that cost a full-screen repaint per frame ——— */
+@media (pointer: coarse), (max-width: 900px) {
+  .grain {
+    display: none;
+  }
+}

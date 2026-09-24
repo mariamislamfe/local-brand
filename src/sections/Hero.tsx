@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
-import { gsap, EASE, ScrollTrigger, finePointer, reducedMotion, scrollToId } from '../lib/motion';
+import { gsap, EASE, ScrollTrigger, finePointer, lite, reducedMotion, scrollToId } from '../lib/motion';
 import { Img } from '../components/Img';
 import { ArrowIcon } from '../components/Icons';
 import { useShop } from '../store/shop';
@@ -26,7 +26,17 @@ export function Hero() {
         const s = el.getBoundingClientRect();
         return { top: r.top - s.top, left: r.left - s.left, width: r.width, height: r.height };
       };
-      gsap.set(plate, rect());
+      // Phones: the plate stays full-size and a clip-path opens it (composited, no per-frame
+      // layout). Desktop resizes the box so the portrait re-crops as it grows.
+      const clipMode = lite();
+      const inset = () => {
+        const r = rect();
+        return `inset(${r.top}px ${el.clientWidth - r.left - r.width}px ${el.clientHeight - r.top - r.height}px ${r.left}px)`;
+      };
+      // shift the photo so the model sits in the small frame, then glide back as it opens
+      const shift = () => rect().left + rect().width / 2 - el.clientWidth / 2;
+      if (clipMode) gsap.set(plate, { top: 0, left: 0, width: '100%', height: '100%', clipPath: inset() });
+      else gsap.set(plate, rect());
 
       // scroll: expand → teaser
       const tl = gsap.timeline({
@@ -37,18 +47,22 @@ export function Hero() {
           end: () => `+=${window.innerHeight * 1.2}`,
           pin: true,
           anticipatePin: 1,
-          scrub: 0.5,
+          scrub: clipMode ? 0.25 : 0.5,
           invalidateOnRefresh: true,
         },
       });
-      tl.fromTo(
-        plate,
-        { top: () => rect().top, left: () => rect().left, width: () => rect().width, height: () => rect().height },
-        { top: 0, left: 0, width: () => el.clientWidth, height: () => el.clientHeight, duration: 1, ease: 'power2.inOut' },
-        0,
-      )
-        .fromTo('.hero__plate-img', { scale: 1.12 }, { scale: 1, duration: 1 }, 0)
-        .to('.hero__letter', { yPercent: (i) => -30 - i * 15, opacity: 0, duration: 0.5, stagger: 0.03 }, 0)
+      if (clipMode) {
+        tl.fromTo(plate, { clipPath: inset }, { clipPath: 'inset(0px 0px 0px 0px)', duration: 1, ease: 'power2.inOut' }, 0)
+          .fromTo('.hero__plate-img', { x: shift, scale: 1.12 }, { x: 0, scale: 1, duration: 1, ease: 'power2.inOut' }, 0);
+      } else {
+        tl.fromTo(
+          plate,
+          { top: () => rect().top, left: () => rect().left, width: () => rect().width, height: () => rect().height },
+          { top: 0, left: 0, width: () => el.clientWidth, height: () => el.clientHeight, duration: 1, ease: 'power2.inOut' },
+          0,
+        ).fromTo('.hero__plate-img', { scale: 1.12 }, { scale: 1, duration: 1 }, 0);
+      }
+      tl.to('.hero__letter', { yPercent: (i) => -30 - i * 15, opacity: 0, duration: 0.5, stagger: 0.03 }, 0)
         .to('.hero__second', { yPercent: -80, autoAlpha: 0, duration: 0.5 }, 0)
         .to('.hero__fade', { autoAlpha: 0, y: -20, duration: 0.3 }, 0)
         .to('.hero__veil', { opacity: 1, duration: 0.4 }, 0.6)

@@ -151,3 +151,11 @@
     align-items: stretch;
   }
 }
+
+@media (pointer: coarse), (max-width: 900px) {
+  .shop__bar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--bone);
+  }
+}

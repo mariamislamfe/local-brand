@@ -170,3 +170,12 @@
   .nav__right { gap: 14px; }
   .nav__mark { font-size: 26px; }
 }
+
+@media (pointer: coarse), (max-width: 900px) {
+  .nav.is-scrolled .nav__bar,
+  .nav.is-menu .nav__bar {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--bone);
+  }
+}

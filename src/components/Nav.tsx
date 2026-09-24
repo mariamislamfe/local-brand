@@ -10,6 +10,7 @@ const TICKER = ['Drop 04 is live', 'Free delivery across Egypt over EGP 3,000', 
 export function Nav() {
   const { count, setCartOpen, menuOpen, setMenuOpen, setFilter, setSearchOpen } = useShop();
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false);
   const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -17,7 +18,11 @@ export function Nav() {
       start: 0,
       end: 'max',
       onUpdate: (self) => {
-        setScrolled(self.scroll() > 40);
+        const s = self.scroll() > 40;
+        if (s !== scrolledRef.current) {
+          scrolledRef.current = s;
+          setScrolled(s);
+        }
         if (bar.current) bar.current.style.transform = `scaleX(${self.progress})`;
       },
     });

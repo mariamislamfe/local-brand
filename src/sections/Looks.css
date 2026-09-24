@@ -88,6 +88,7 @@
   will-change: clip-path;
 }
 .looks__shot img {
+  filter: var(--tone);
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -159,6 +160,31 @@
   bottom: calc(var(--gutter) + 72px);
   width: min(360px, 25vw);
 }
+.looks__pieces {
+  display: grid;
+}
+.looks__pieces-panel {
+  grid-area: 1 / 1;
+  align-self: end;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s 0.4s;
+}
+.looks__pieces-panel.is-active {
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+.looks__pieces-panel .looks__cta,
+.looks__pieces-panel .looks__pieces-head {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.looks__pieces-panel.is-active .looks__cta,
+.looks__pieces-panel.is-active .looks__pieces-head {
+  opacity: 1;
+  transition: opacity 0.6s 0.1s;
+}
 .looks__pieces-head {
   display: flex;
   justify-content: space-between;
@@ -169,10 +195,14 @@
   display: grid;
   grid-template-columns: 1fr 44px;
   border-top: 1px solid var(--line);
-  animation: piece-in 0.9s var(--e-out) both;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.3s, transform 0.3s;
 }
-@keyframes piece-in {
-  from { opacity: 0; transform: translateY(14px); }
+.looks__pieces-panel.is-active .looks__piece {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s var(--e-out), transform 0.9s var(--e-out);
 }
 .looks__piece-open {
   display: grid;
@@ -381,5 +411,43 @@
   .looks__tick-thumb {
     width: 100%;
     height: 30px;
+  }
+}
+
+/* ——— phones: same scene, lighter compositing ———
+   Blending the whole seven-photo stack (multiply + mask + per-photo filters) forced a full
+   re-composite every frame on mobile GPUs. Here the photos are plain layers on a matching
+   grey, and only the big number blends — over the model instead of behind her. */
+@media (pointer: coarse), (max-width: 900px) {
+  .looks {
+    --studio: #d7d7d5;
+  }
+  .looks__stage {
+    background: var(--studio);
+  }
+  .looks__model {
+    mix-blend-mode: normal;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .looks__model::after {
+    content: '';
+    position: absolute;
+    z-index: 15;
+    inset: 0 0 auto 0;
+    height: 18%;
+    background: linear-gradient(to bottom, var(--studio), rgba(215, 215, 213, 0));
+    pointer-events: none;
+  }
+  .looks__shot {
+    will-change: auto;
+  }
+  .looks__shot img {
+    filter: none;
+  }
+  .looks__number-mask {
+    z-index: 3;
+    opacity: 0.55;
+    mix-blend-mode: multiply;
   }
 }

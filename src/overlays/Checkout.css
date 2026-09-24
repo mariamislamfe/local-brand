@@ -258,3 +258,7 @@
 .co__card {
   animation: piece-in 0.6s var(--e-out) both;
 }
+
+@keyframes piece-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
