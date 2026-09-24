@@ -1,0 +1,220 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--bone);
+}
+
+/* invisible layout guide — JS reads it to place the plate */
+.hero__frame {
+  position: absolute;
+  top: calc(var(--nav-top) + 1vh);
+  left: 40vw;
+  width: 27vw;
+  height: calc(100svh - var(--nav-top) - 6vh);
+  pointer-events: none;
+}
+
+.hero__plate {
+  position: absolute;
+  z-index: 2;
+  overflow: hidden;
+}
+.hero__plate-clip,
+.hero__plate-img {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hero__plate-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: rgba(18, 17, 16, 0.45);
+  pointer-events: none;
+}
+.hero__teaser {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 6vh;
+  color: var(--bone);
+  font-size: clamp(64px, 11vw, 190px);
+  line-height: 0.84;
+  pointer-events: none;
+}
+.hero__teaser em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--saffron);
+}
+.hero__teaser-small {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding-top: 18px;
+}
+
+/* giant wordmark — inverts over the photograph */
+.hero__word {
+  position: absolute;
+  z-index: 3;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: -0.02em;
+  display: flex;
+  justify-content: space-between;
+  font-size: min(33.5vw, 50vh);
+  line-height: 0.74;
+  color: var(--bone);
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+.hero__letter {
+  display: block;
+  overflow: hidden;
+  padding: 0.04em 0.03em 0;
+  margin: 0 -0.03em;
+}
+.hero__letter-in {
+  display: block;
+}
+
+.hero__second {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--nav-top) + 14vh);
+  left: calc(67vw + var(--gutter));
+  width: 13vw;
+}
+.hero__second-clip {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #cfcac2;
+}
+.hero__second-clip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__copy {
+  position: absolute;
+  z-index: 4;
+  top: calc(var(--nav-top) + 5vh);
+  left: var(--gutter);
+  width: min(36vw, 480px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.hero__headline {
+  font-family: var(--sans);
+  font-variation-settings: 'wdth' 62;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(54px, 6.4vw, 118px);
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+}
+.hero__headline em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--saffron);
+  letter-spacing: -0.04em;
+}
+.hero__sub {
+  max-width: 34ch;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hero__ctas .btn--ghost:hover {
+  color: var(--ink);
+}
+
+.hero__tag {
+  position: absolute;
+  z-index: 4;
+  top: calc(var(--nav-top) + 14vh + 17.3vw + 14px);
+  left: calc(67vw + var(--gutter));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+}
+.hero__tag .t-meta:first-child {
+  color: var(--ash);
+}
+.hero__tag-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+}
+
+@media (max-width: 900px) {
+  .hero__frame {
+    top: calc(var(--nav-top) + 8px);
+    left: auto;
+    right: var(--gutter);
+    width: 46vw;
+    height: 44svh;
+  }
+  .hero__word {
+    font-size: 36vw;
+  }
+  .hero__second {
+    top: calc(var(--nav-top) + 30svh);
+    left: var(--gutter);
+    width: 28vw;
+    z-index: 3;
+  }
+  .hero__copy {
+    top: auto;
+    bottom: calc(29vw + 3svh);
+    width: auto;
+    right: var(--gutter);
+    gap: 12px;
+  }
+  .hero__copy .sticker {
+    position: absolute;
+    top: -52svh;
+    left: 0;
+  }
+  .hero__headline {
+    font-size: clamp(46px, 13vw, 72px);
+  }
+  .hero__sub {
+    display: none;
+  }
+  .hero__ctas .btn {
+    min-height: 46px;
+    padding: 0 16px;
+  }
+  .hero__tag {
+    display: none;
+  }
+}
+@media (max-height: 820px) and (min-width: 901px) {
+  .hero__tag {
+    display: none;
+  }
+}

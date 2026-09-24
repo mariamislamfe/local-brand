@@ -1,0 +1,385 @@
+.looks {
+  --tint: var(--ink);
+  --studio: #d9d8d5;
+  position: relative;
+  background: var(--studio);
+}
+.looks__stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 60% 70% at 50% 58%, #e2e1de 0%, var(--studio) 70%);
+}
+
+/* ——— intro ——— */
+.looks__intro {
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--nav-h) + 2vh);
+  left: var(--gutter);
+}
+.looks__heading {
+  margin-top: 12px;
+  font-size: clamp(40px, 4.4vw, 80px);
+  line-height: 0.84;
+}
+.looks__heading em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  color: var(--tint);
+  transition: color 1s var(--e-soft);
+}
+
+/* ——— giant number ——— */
+.looks__number-mask {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  height: 1em;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: min(72svh, 56vw);
+  line-height: 1;
+  overflow: hidden;
+  transform: translate(-50%, -52%);
+  color: var(--tint);
+  opacity: 0.9;
+  transition: color 1s var(--e-soft);
+  letter-spacing: -0.06em;
+  pointer-events: none;
+}
+.looks__numbers span {
+  display: block;
+  height: 1em;
+  text-align: center;
+  padding-right: 0.06em;
+}
+
+/* ——— model ——— */
+.looks__model {
+  display: block;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0;
+  height: 94svh;
+  aspect-ratio: 2 / 3;
+  translate: -50% 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 17%, #000 83%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 17%, #000 83%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%);
+  mask-composite: intersect;
+  /* multiply knocks the studio grey out so the big number reads *behind* her */
+  mix-blend-mode: multiply;
+}
+.looks__shot {
+  display: block;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: clip-path;
+}
+.looks__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  transform-origin: 50% 100%;
+}
+.looks__scan {
+  position: absolute;
+  z-index: 20;
+  left: 12%;
+  right: 12%;
+  top: 100%;
+  height: 1px;
+  background: var(--saffron);
+  box-shadow: 0 0 0 0.5px rgba(201, 119, 43, 0.4);
+}
+.looks__scan > span {
+  position: absolute;
+  right: 0;
+  bottom: 6px;
+  color: var(--saffron);
+}
+
+/* ——— info (left) ——— */
+.looks__info {
+  position: absolute;
+  z-index: 5;
+  left: var(--gutter);
+  bottom: calc(var(--gutter) + 72px);
+  width: 30vw;
+  height: 40vh;
+}
+.looks__info-item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.looks__info-item .mask > span {
+  transform: translateY(105%);
+  transition: transform 0.5s var(--e-inout);
+}
+.looks__info-item.is-active .mask > span {
+  transform: none;
+  transition: transform 1.1s var(--e-out) 0.25s;
+}
+.looks__info-item.is-active .looks__title .mask > span {
+  transition-duration: 1.2s;
+}
+.looks__kicker {
+  margin-bottom: 14px;
+}
+.looks__title {
+  font-size: clamp(56px, 7.2vw, 136px);
+  line-height: 0.82;
+}
+.looks__mood {
+  margin-top: 16px;
+  font-size: clamp(18px, 1.5vw, 24px);
+  max-width: 18em;
+}
+
+/* ——— pieces (right) ——— */
+.looks__pieces {
+  position: absolute;
+  z-index: 5;
+  right: var(--gutter);
+  bottom: calc(var(--gutter) + 72px);
+  width: min(360px, 25vw);
+}
+.looks__pieces-head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  color: var(--ink-2);
+}
+.looks__piece {
+  display: grid;
+  grid-template-columns: 1fr 44px;
+  border-top: 1px solid var(--line);
+  animation: piece-in 0.9s var(--e-out) both;
+}
+@keyframes piece-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+.looks__piece-open {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  row-gap: 2px;
+  padding: 12px 0;
+  text-align: left;
+}
+.looks__piece-thumb {
+  grid-row: span 2;
+  width: 44px;
+  height: 54px;
+  overflow: hidden;
+  background: #cfcac2;
+}
+.looks__piece-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.looks__piece-name {
+  align-self: end;
+  font-family: var(--sans);
+  font-variation-settings: 'wdth' 72;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  line-height: 1.1;
+  transition: transform 0.6s var(--e-out);
+}
+.looks__piece-open:hover .looks__piece-name {
+  transform: translateX(6px);
+}
+.looks__piece-meta {
+  align-self: start;
+  color: var(--ink-2);
+}
+.looks__piece-add {
+  align-self: center;
+  justify-self: end;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--ink);
+  font-size: 18px;
+  line-height: 1;
+  transition: background-color 0.3s, color 0.3s;
+}
+.looks__piece-add:hover {
+  background: var(--ink);
+  color: var(--bone);
+}
+.looks__cta {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ——— progress ——— */
+.looks__progress {
+  position: absolute;
+  z-index: 5;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.looks__tick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  text-align: left;
+  color: var(--ash);
+  transition: color 0.5s;
+}
+.looks__tick.is-active,
+.looks__tick.is-past {
+  color: var(--ink);
+}
+.looks__tick-thumb {
+  width: 30px;
+  height: 38px;
+  overflow: hidden;
+  background: #cfcac2;
+  opacity: 0.45;
+  filter: grayscale(1);
+  transition: opacity 0.4s, filter 0.4s, outline-color 0.4s;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+}
+.looks__tick-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.looks__tick.is-active .looks__tick-thumb,
+.looks__tick:hover .looks__tick-thumb {
+  opacity: 1;
+  filter: none;
+}
+.looks__tick.is-active .looks__tick-thumb {
+  outline-color: var(--ink);
+}
+.looks__tick-track {
+  position: absolute;
+  left: 0;
+  right: -6px;
+  top: 0;
+  height: 2px;
+  overflow: hidden;
+  background: var(--line);
+}
+.looks__tick-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.looks__hint {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: calc(var(--nav-h) + 2vh);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.looks__hint i {
+  width: 1px;
+  height: 22px;
+  background: var(--ink);
+  animation: hint 1.8s var(--e-inout) infinite;
+  transform-origin: 50% 0;
+}
+@keyframes hint {
+  0% { transform: scaleY(0); transform-origin: 50% 0; }
+  50% { transform: scaleY(1); transform-origin: 50% 0; }
+  51% { transform-origin: 50% 100%; }
+  100% { transform: scaleY(0); transform-origin: 50% 100%; }
+}
+
+@media (max-width: 1100px) {
+  .looks__info { width: 34vw; }
+  .looks__pieces { width: 30vw; }
+}
+
+@media (max-width: 900px) {
+  .looks__heading,
+  .looks__pieces-head,
+  .looks__pieces ul,
+  .looks__tick .t-meta,
+  .looks__mood {
+    display: none;
+  }
+  .looks__intro {
+    top: calc(var(--nav-h) + 4px);
+  }
+  .looks__hint {
+    top: auto;
+    left: auto;
+    right: var(--gutter);
+    bottom: calc(var(--gutter) + 150px);
+    transform: none;
+    writing-mode: vertical-rl;
+  }
+  .looks__hint i { display: none; }
+  .looks__model {
+    height: 76svh;
+    bottom: 12svh;
+  }
+  .looks__number-mask {
+    font-size: min(46svh, 88vw);
+    top: 42%;
+  }
+  .looks__info {
+    width: auto;
+    right: var(--gutter);
+    height: 30vh;
+    bottom: calc(var(--gutter) + 104px);
+  }
+  .looks__title {
+    font-size: clamp(44px, 14vw, 72px);
+  }
+  .looks__pieces {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    bottom: calc(var(--gutter) + 36px);
+  }
+  .looks__cta {
+    margin-top: 0;
+  }
+  .looks__progress {
+    bottom: calc(var(--gutter) - 4px);
+  }
+  .looks__tick {
+    padding-top: 6px;
+  }
+  .looks__tick-thumb {
+    width: 100%;
+    height: 30px;
+  }
+}

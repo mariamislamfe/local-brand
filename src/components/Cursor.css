@@ -1,0 +1,54 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.cursor.is-visible {
+  opacity: 1;
+}
+.cursor__disc {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  margin: -44px 0 0 -44px;
+  border-radius: 50%;
+  background: var(--bone);
+  mix-blend-mode: difference;
+  display: grid;
+  place-items: center;
+  transform: scale(0.09);
+  transition: transform 0.55s var(--e-out), background-color 0.3s;
+}
+.cursor.is-link .cursor__disc {
+  transform: scale(0.28);
+}
+.cursor.is-down .cursor__disc {
+  transform: scale(0.06);
+}
+.cursor.is-labelled .cursor__disc {
+  transform: scale(1);
+  background: var(--ink);
+  mix-blend-mode: normal;
+}
+.cursor.is-labelled.is-down .cursor__disc {
+  transform: scale(0.9);
+}
+.cursor__label {
+  font-family: var(--sans);
+  font-variation-settings: 'wdth' 70;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cursor.is-labelled .cursor__label {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
